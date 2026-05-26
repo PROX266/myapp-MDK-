@@ -7,6 +7,7 @@ def client():
     with app.test_client() as client:
         yield client
 
+# 1. Тест успешного ответа главной страницы
 def test_home_success(client):
     response = client.get('/')
     assert response.status_code == 200
@@ -23,16 +24,12 @@ def test_home_headers(client):
     assert response.headers['Content-Type'] == 'application/json'
 
 # 4. Тест для проверки генерации файла визуализации
-# (проверяет, что после работы скрипта файл с графиком действительно создается)
 def test_visualization_file_created():
-    # Имя файла, которое задано в visualization.py
     image_path = 'requests_stats.png'
     
-    # Перед тестом удаляем файл, если он остался от прошлых запусков
     if os.path.exists(image_path):
         os.remove(image_path)
         
-    # Имитируем логику скрипта визуализации внутри теста
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -44,8 +41,7 @@ def test_visualization_file_created():
     plt.figure(figsize=(10, 5))
     sns.barplot(x=labels, y=data)
     plt.savefig(image_path)
-    plt.close() # Закрываем фигуру, чтобы освободить память
+    plt.close()
     
-    # Проверяем, что файл успешно создался и он не пустой
     assert os.path.exists(image_path)
     assert os.path.getsize(image_path) > 0
