@@ -13,12 +13,12 @@ def test_home_success(client):
     assert response.status_code == 200
     assert response.get_json() == {"message": "Hello, DevOps!"}
 
-# 2. Тест на ошибку 404 (проверяем поведение при запросе несуществующего роута)
+# 2. Тест на ошибку 404
 def test_page_not_found(client):
     response = client.get('/unknown-page')
     assert response.status_code == 404
 
-# 3. Тест корректности формата заголовков (Content-Type должен быть JSON)
+# 3. Тест корректности формата заголовков
 def test_home_headers(client):
     response = client.get('/')
     assert response.headers['Content-Type'] == 'application/json'
